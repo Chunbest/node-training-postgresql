@@ -45,7 +45,7 @@ const requestListener = async (req, res) => {
 	} else if (req.url === "/api/credit-package" && req.method === "POST") {
 		//新增
 		req.on('end', async () => {
-					
+
 			try {
 				const { name, credit_amount, price } = JSON.parse(body);
 				if (!isValidString(name || !isNumber(credit_amount | isNumber(price)))) {
@@ -80,7 +80,7 @@ const requestListener = async (req, res) => {
 				})
 
 				const result = await creditPackage.save(newCreditPackage);
-			
+
 				res.writeHead(200, headers);
 				res.write(JSON.stringify({
 					status: "success",
@@ -96,7 +96,7 @@ const requestListener = async (req, res) => {
 		// 刪除
 		try {
 			const creditPackageId = req.url.split("/").pop();
-			if (!isValidString(creditPackageId) ) {
+			if (!isValidString(creditPackageId)) {
 				res.writeHead(400, headers);
 				res.write(JSON.stringify({
 					status: "failed",
@@ -106,7 +106,7 @@ const requestListener = async (req, res) => {
 				return;
 			}
 			const result = await AppDataSource.getRepository('CreditPackage').delete(creditPackageId);
-			if ( result.affected === 0) { 
+			if (result.affected === 0) {
 				res.writeHead(400, headers);
 				res.write(JSON.stringify({
 					status: "failed",
@@ -125,24 +125,24 @@ const requestListener = async (req, res) => {
 		}
 	} else if (req.url === "/api/coaches/skill" && req.method === "GET") {
 		try {
-	//從資料庫取得用find
-	const data = await AppDataSource.getRepository('Skill').find({
-		select: ['id', 'name']
-	})
-	res.writeHead(200, headers);
-	res.write(JSON.stringify({
-		status: "success",
-		data: data,
-	}))
-	res.end();
-} catch (error) {
-	errorHandle(res);
-}
-} else if (req.url === "/api/coaches/skill" && req.method === "POST") {
+			//從資料庫取得用find
+			const data = await AppDataSource.getRepository('Skill').find({
+				select: ['id', 'name']
+			})
+			res.writeHead(200, headers);
+			res.write(JSON.stringify({
+				status: "success",
+				data: data,
+			}))
+			res.end();
+		} catch (error) {
+			errorHandle(res);
+		}
+	} else if (req.url === "/api/coaches/skill" && req.method === "POST") {
 		req.on('end', async () => {
 			try {
 				const { name } = JSON.parse(body);
-				if (!isValidString(name)) { 
+				if (!isValidString(name)) {
 					res.writeHead(400, headers);
 					res.write(JSON.stringify({
 						status: "failed",
@@ -179,7 +179,7 @@ const requestListener = async (req, res) => {
 
 			}
 		})
-		
+
 	} else if (req.url.startsWith("/api/coaches/skill/") && req.method === "DELETE") {
 		try {
 			const skillId = req.url.split('/').pop();
@@ -191,7 +191,7 @@ const requestListener = async (req, res) => {
 				}))
 				res.end();
 				return;
-			 }
+			}
 			const result = await AppDataSource.getRepository('Skill').delete(skillId)
 			if (result.affected === 0) {
 				res.writeHead(400, headers);
@@ -211,8 +211,8 @@ const requestListener = async (req, res) => {
 		} catch (error) {
 			errorHandle(res);
 		}
-}
-else if (req.method === "OPTIONS") {
+	}
+	else if (req.method === "OPTIONS") {
 		res.writeHead(200, headers)
 		res.end()
 	} else {
